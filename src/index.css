@@ -1,13 +1,76 @@
+@import url("https://fonts.googleapis.com/css?family=Gotu|Open+Sans:400,600,700,800|Poppins&display=swap");
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Poppins", sans-serif;
+  color: #595959;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1.display-5.page-title::after {
+  content: "";
+  width: 30%;
+  display: block;
+  height: 4px;
+  background-color: #212529;
+}
+
+.bordered-page-title::before {
+  content: "";
+  width: 10%;
+  height: 5px;
+  display: inline-block;
+  background-color: #ff8a00;
+  vertical-align: middle;
+  margin-right: 20px;
+}
+
+.bordered-page-title::after {
+  content: "";
+  width: 10%;
+  height: 5px;
+  display: inline-block;
+  background-color: #ff8a00;
+  vertical-align: middle;
+  margin-left: 20px;
+}
+
+.bordered-page-title {
+  text-align: center;
+  margin: 20px;
+}
+
+.bordered-right-page-title {
+  width: 100%;
+}
+.bordered-right-page-title::after {
+  content: "";
+  width: 70%;
+  height: 5px;
+  display: inline-block;
+  background-color: #ff8a00;
+  vertical-align: middle;
+  margin-left: 20px;
+}
+
+.content {
+  margin-bottom: 200px;
+  margin-top: 192px;
+}
+
+.header-banner {
+  height: 65px;
+  margin-top: 93px;
+  background-color: #313131;
+}
+
+.form {
+  border: 2px solid #dfdfdf;
+  padding: 21px 25px;
+  box-shadow: 0px 6px 7px 0px #8b8b8b;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Gotu", sans-serif;
 }
