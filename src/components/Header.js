@@ -44,8 +44,20 @@ const Header = () => {
                 </Link>
               </li>
               <li className='nav-item'>
-                <Link className='nav-link text-white' to={"/cart"}>
-                  Cart ({store.cart.length})
+                <Link
+                  style={{
+                    backgroundColor: " #fff",
+                    color: "#000",
+                    borderRadius: "17px"
+                  }}
+                  className='nav-link   cart'
+                  to={"/cart"}>
+                  Cart
+                  <span
+                    className='badge badge-pill badge-dark'
+                    style={{ marginLeft: "5px" }}>
+                    {store.cart.length}
+                  </span>
                 </Link>
               </li>
               <li className='nav-item'>

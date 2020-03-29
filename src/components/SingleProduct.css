@@ -4,3 +4,24 @@
 .single-product-price {
   display: block;
 }
+
+.single-product-price .price-onsale-regular {
+  font-family: "Gotu", sans-serif;
+  font-size: 33px;
+  margin-right: 10px;
+  text-decoration: line-through;
+}
+.single-product-price .price-onsale-sale {
+  font-family: "Gotu", sans-serif;
+  font-size: 33px;
+  font-weight: bold;
+  color: #008000;
+}
+.single-product-price .price-regular {
+  font-family: "Gotu", sans-serif;
+  font-size: 33px;
+}
+
+.single-product-img {
+  border: 2px solid #b5b5b5;
+}

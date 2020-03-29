@@ -17,6 +17,28 @@ const PaymentForm = ({ customer }) => {
   const handleSetacknowlegment = event =>
     setacknowlegment(event.target.checked);
 
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+  const today = new Date();
+  const date =
+    months[today.getMonth()] +
+    " " +
+    today.getDate() +
+    ", " +
+    today.getFullYear();
+
   const paymentData = {
     paymentmethod,
     cc_name,
@@ -24,6 +46,7 @@ const PaymentForm = ({ customer }) => {
     cc_expiration,
     cc_cvv,
     acknowlegment,
+    date: date,
     orderNumber: Date.now()
   };
 

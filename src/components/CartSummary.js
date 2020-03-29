@@ -1,14 +1,30 @@
-import React, { useContext } from "react";
+import React, { useContext, Fragment } from "react";
 import ProductContext from "../contexts/productContext";
 
+import "./CartSummary.css";
+
 const CartSummary = props => {
-  const { store, subtotal, calculateTotal } = useContext(ProductContext);
+  const { store, subtotal, calculateTotal, getPrice } = useContext(
+    ProductContext
+  );
+
+  const renderCartProducts = () => {
+    return store.cart.map(product => (
+      <tr key={product.id}>
+        <th scope='row'>{product.name}</th>
+        <td>
+          <span className='float-right'>{getPrice(product.id)}</span>
+        </td>
+      </tr>
+    ));
+  };
 
   return (
-    <React.Fragment>
+    <div className='cart-summary'>
       <h3>CART TOTALS</h3>
       <table className='table'>
         <tbody>
+          {renderCartProducts()}
           <tr>
             <th scope='row'>Subtotal</th>
             <td>
@@ -29,7 +45,7 @@ const CartSummary = props => {
           </tr>
         </tbody>
       </table>
-    </React.Fragment>
+    </div>
   );
 };
 

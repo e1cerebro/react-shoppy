@@ -12,32 +12,35 @@ import OrderSummary from "../components/OrderSummary";
 import DeleteProduct from "../components/DeleteProduct";
 import Footer from "../components/Footer";
 import { ProductProvider } from "../contexts/productContext";
-
-import image1 from "../img/slider1.jpg";
-import image2 from "../img/slider2.jpg";
-import image3 from "../img/slider3.jpg";
+import { StripeProvider } from "react-stripe-elements";
 
 const App = () => {
   return (
     <Fragment>
-      <Router history={history}>
-        <ProductProvider>
-          <Header />
-          <Switch>
-            <Route path='/' exact component={ProductList} />
-            <Route path='/about-us' exact component='' />
-            <Route path='/contact-us' exact component='' />
-            <Route path='/cart' exact component={Cart} />{" "}
-            <Route path='/checkout' exact component={Checkout} />
-            <Route path='/order-summarry/:id' exact component={OrderSummary} />
-            <Route path='/create-product' exact component={CreateProduct} />
-            <Route path='/:id' exact component={SingleProduct} />
-            <Route path='/edit/:id' exact component={EditProduct} />
-            <Route path='/delete/:id' exact component={DeleteProduct} />
-          </Switch>
-          <Footer />
-        </ProductProvider>
-      </Router>
+      <StripeProvider apiKey='pk_test_sj3ctl3L7864EDrVKrMy3TAI'>
+        <Router history={history}>
+          <ProductProvider>
+            <Header />
+            <Switch>
+              <Route path='/' exact component={ProductList} />
+              <Route path='/about-us' exact component='' />
+              <Route path='/contact-us' exact component='' />
+              <Route path='/cart' exact component={Cart} />{" "}
+              <Route path='/checkout' exact component={Checkout} />
+              <Route
+                path='/order-summarry/:id'
+                exact
+                component={OrderSummary}
+              />
+              <Route path='/create-product' exact component={CreateProduct} />
+              <Route path='/:id' exact component={SingleProduct} />
+              <Route path='/edit/:id' exact component={EditProduct} />
+              <Route path='/delete/:id' exact component={DeleteProduct} />
+            </Switch>
+            <Footer />
+          </ProductProvider>
+        </Router>
+      </StripeProvider>
     </Fragment>
   );
 };

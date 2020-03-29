@@ -1,0 +1,14 @@
+.cart-summary {
+  padding: 22px 4px;
+  background-color: #f0f0f0;
+}
+
+span.cart-onsale-regular {
+  text-decoration: line-through;
+  margin-right: 4px;
+}
+span.cart-onsale-sale {
+  color: green;
+  font-weight: bold;
+  font-size: 18px;
+}

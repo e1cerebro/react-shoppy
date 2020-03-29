@@ -4,6 +4,7 @@ import {
   REMOVE_FROM_CART,
   FETCH_PRODUCT,
   FIND_ORDER,
+  EDIT_PRODUCT,
   PROCESS_ORDER,
   DELETE_PRODUCT
 } from "../reducer/types";
@@ -25,6 +26,21 @@ export default (state = [], action) => {
       return {
         ...state,
         singleProduct: state.products.filter(item => item.id == 2)
+      };
+    case EDIT_PRODUCT:
+      return {
+        ...state,
+        products: state.products.map(item => {
+          if (item.id === action.payload.id) {
+            item.id = action.payload.id;
+            item.name = action.payload.name;
+            item.regularPrice = action.payload.regularPrice;
+            item.salesPrice = action.payload.salesPrice;
+            item.shortdescription = action.payload.shortdescription;
+            item.maindescription = action.payload.maindescription;
+          }
+          return item;
+        })
       };
     case DELETE_PRODUCT:
       return {

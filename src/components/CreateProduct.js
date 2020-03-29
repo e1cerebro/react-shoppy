@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import ProductContext from "../contexts/productContext";
 
 const CreateProduct = () => {
-  const { store, createProduct } = useContext(ProductContext);
+  const { createProduct } = useContext(ProductContext);
   const [name, setName] = useState("");
   const [regularPrice, setRegularPrice] = useState("");
   const [salesPrice, setSalesPrice] = useState("");
@@ -21,8 +21,8 @@ const CreateProduct = () => {
     const product = {
       id: Date.now(),
       name,
-      regularPrice,
-      salesPrice,
+      regularPrice: parseInt(regularPrice).toFixed(2),
+      salesPrice: parseInt(salesPrice).toFixed(2),
       shortdescription,
       maindescription,
       img: ""
@@ -36,7 +36,7 @@ const CreateProduct = () => {
       className='container'
       style={{ marginTop: "132px", marginBottom: "126px" }}>
       <div className='row'>
-        <div className='col-sm-6 offset-md-3'>
+        <div className='col-sm-12'>
           <h1 class='display-5 page-title'>Create Product</h1>
           <form className='mt-4 form' id='form' onSubmit={handleFormSubmit}>
             <div className='form-group'>
@@ -101,7 +101,7 @@ const CreateProduct = () => {
               type='submit'
               id='button'
               className='btn btn-lg btn-primary'>
-              PUBLISH NOW
+              <i class='fas fa-save'></i> PUBLISH NOW
             </button>
           </form>
         </div>

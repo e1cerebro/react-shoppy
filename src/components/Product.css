@@ -1,25 +1,18 @@
-.onsale .regular-price {
-  font-size: 27px;
-  text-decoration: line-through;
-  font-weight: 600;
-}
-
-.regular-price {
-  font-size: 27px;
-  font-weight: 600;
-}
-
-.onsale .sales-price {
-  font-size: 32px;
-  font-weight: 600;
-  margin-left: 7px;
-  color: green;
-}
-
-.onsale .sales-price,
-.regular-price,
-.onsale .regular-price {
+.catalog-display .price-onsale-regular {
   font-family: "Gotu", sans-serif;
+  font-size: 25px;
+  margin-right: 10px;
+  text-decoration: line-through;
+}
+.catalog-display .price-onsale-sale {
+  font-family: "Gotu", sans-serif;
+  font-size: 26px;
+  font-weight: bold;
+  color: #008000;
+}
+.catalog-display .price-regular {
+  font-family: "Gotu", sans-serif;
+  font-size: 25px;
 }
 
 h5.card-title.product-title a {
