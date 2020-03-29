@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext, createContext } from "react";
 import CartSummary from "./CartSummary";
 import PaymentForm from "./PaymentForm";
 import { Elements } from "react-stripe-elements";
+import productContext from "../contexts/productContext";
 
 import "./Checkout.css";
 
@@ -14,6 +15,10 @@ const Checkout = () => {
   const [phone, setPhone] = useState("");
   const [postalcode, setPostalCode] = useState("");
   const [optionalnote, setOptionalNote] = useState("");
+
+  const { store, calculateTotal } = useContext(productContext);
+
+  const total = calculateTotal();
 
   const handleEmailChange = event => setEmail(event.target.value);
   const handleFirstName = event => setFirstName(event.target.value);
@@ -142,7 +147,11 @@ const Checkout = () => {
           <div className='col-sm-5 checkout-summary '>
             <CartSummary />
             <Elements>
-              <PaymentForm customer={customerData} />
+              <PaymentForm
+                store={store}
+                customer={customerData}
+                orderTotal={total}
+              />
             </Elements>
           </div>
         </div>

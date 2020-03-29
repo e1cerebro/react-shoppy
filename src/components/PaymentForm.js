@@ -1,203 +1,145 @@
-import React, { useContext, useState } from "react";
-import productContext from "../contexts/productContext";
+import React, { Component } from "react";
+import { CardElement, injectStripe } from "react-stripe-elements";
+import PropTypes from "prop-types";
+import axios from "axios";
+import qs from "query-string-object";
+import paymentmethods from "./img/paymentmethods.png";
 
-const PaymentForm = ({ customer }) => {
-  const [paymentmethod, setpaymentmethod] = useState("credit");
-  const [cc_name, setcc_name] = useState("");
-  const [cc_number, setcc_number] = useState("");
-  const [cc_expiration, setcc_expiration] = useState("");
-  const [cc_cvv, setcc_cvv] = useState("");
-  const [acknowlegment, setacknowlegment] = useState("");
-
-  const handlePaymentMethod = event => setpaymentmethod(event.target.id);
-  const handleSetcc_name = event => setcc_name(event.target.value);
-  const handleSetcc_number = event => setcc_number(event.target.value);
-  const handleSetcc_expiration = event => setcc_expiration(event.target.value);
-  const handleSetcc_cvv = event => setcc_cvv(event.target.value);
-  const handleSetacknowlegment = event =>
-    setacknowlegment(event.target.checked);
-
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ];
-  const today = new Date();
-  const date =
-    months[today.getMonth()] +
-    " " +
-    today.getDate() +
-    ", " +
-    today.getFullYear();
-
-  const paymentData = {
-    paymentmethod,
-    cc_name,
-    cc_number,
-    cc_expiration,
-    cc_cvv,
-    acknowlegment,
-    date: date,
-    orderNumber: Date.now()
+class PaymentForm extends Component {
+  state = {
+    paymentmethod: "",
+    cc_name: "",
+    cc_number: "",
+    cc_expiration: "",
+    cc_cvv: "",
+    acknowlegment: ""
   };
 
-  const { processOrder } = useContext(productContext);
+  handlePaymentMethod = event =>
+    this.setState({ paymentmethod: event.target.id });
+  handleSetcc_name = event => this.setState({ cc_name: event.target.value });
+  handleSetcc_number = event =>
+    this.setState({ cc_number: event.target.value });
+  handleSetcc_expiration = event =>
+    this.setState({ cc_expiration: event.target.value });
+  handleSetcc_cvv = event => this.setState({ cc_cvv: event.target.value });
+  handleSetacknowlegment = event =>
+    this.setState({ acknowlegment: event.target.checked });
 
-  const submitOrder = event => {
+  // const months = [
+  //   "January",
+  //   "February",
+  //   "March",
+  //   "April",
+  //   "May",
+  //   "June",
+  //   "July",
+  //   "August",
+  //   "September",
+  //   "October",
+  //   "November",
+  //   "December"
+  // ];
+  // const today = new Date();
+  // const date =
+  //   months[today.getMonth()] +
+  //   " " +
+  //   today.getDate() +
+  //   ", " +
+  //   today.getFullYear();
+
+  // const paymentData = {
+  //   paymentmethod,
+  //   cc_name,
+  //   cc_number,
+  //   cc_expiration,
+  //   cc_cvv,
+  //   acknowlegment,
+  //   date: date,
+  //   orderNumber: Date.now()
+  // };
+
+  stripeAuthHeader = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    Authorization: `Bearer rk_test_VgEfxE4ZNNwfjphmfcmonv8p00BxrNzq89`
+  };
+
+  submitOrder = async event => {
     event.preventDefault();
-    processOrder({ ...customer, ...paymentData });
+    try {
+      const { token } = await this.props.stripe.createToken();
+      const payment = await axios.post(
+        `https://api.stripe.com/v1/charges`,
+        qs.stringify({
+          source: token.id,
+          amount: parseInt(this.props.orderTotal) * 100,
+          currency: "cad",
+          description: "Test purchase on Shoppy",
+          receipt_email: "nwachukwu16@gmail.com",
+          shipping: {
+            address: {
+              city: "London",
+              country: "Canada",
+              line1: this.props.customer.address,
+              line2: null,
+              postal_code: this.props.customer.postalcode,
+              state: "Ontario"
+            },
+            phone: this.props.customer.phone,
+            name: `${this.props.customer.firstname} ${this.props.customer.lastname}`
+          }
+        }),
+        { headers: this.stripeAuthHeader }
+      );
+
+      console.log(payment);
+    } catch (error) {
+      console.log(error);
+    }
+
+    //processOrder({ ...customer, ...paymentData });
   };
-  return (
-    <div className='row'>
-      <form onSubmit={submitOrder}>
-        <div className='card' style={{ width: "100%" }}>
-          <div className='card-body'>
-            <div className='d-block my-3'>
-              <h3>Pay securely</h3>
-              <div className='custom-control custom-radio'>
-                <input
-                  id='credit'
-                  name='paymentMethod'
-                  value={paymentmethod}
-                  type='radio'
-                  className='custom-control-input'
-                  checked={true}
-                  onChange={handlePaymentMethod}
-                  required=''
-                />
-                <label className='custom-control-label' htmlFor='credit'>
-                  Credit card
-                </label>
-              </div>
-              <div className='custom-control custom-radio'>
-                <input
-                  id='debit'
-                  name='paymentMethod'
-                  type='radio'
-                  onChange={handlePaymentMethod}
-                  className='custom-control-input'
-                  required=''
-                />
-                <label className='custom-control-label' htmlFor='debit'>
-                  Debit card
-                </label>
-              </div>
-              <div className='custom-control custom-radio'>
-                <input
-                  id='paypal'
-                  name='paymentMethod'
-                  type='radio'
-                  onChange={handlePaymentMethod}
-                  className='custom-control-input'
-                  required=''
-                />
-                <label className='custom-control-label' htmlFor='paypal'>
-                  Paypal
-                </label>
-              </div>
-            </div>
 
-            <div className='row'>
-              <div className='col-md-6 mb-3'>
-                <input
-                  type='text'
-                  className='form-control'
-                  id='cc_name'
-                  name='cc_name'
-                  value={cc_name}
-                  onChange={handleSetcc_name}
-                  placeholder=''
-                  required={true}
-                />
-                <label htmlFor='cc-name'>Name on card</label>
-                <small className='text-muted'>
-                  Full name as displayed on card
-                </small>
-                <div className='invalid-feedback'>Name on card is required</div>
-              </div>
-              <div className='col-md-6 mb-3'>
-                <input
-                  type='text'
-                  className='form-control'
-                  id='cc_number'
-                  name='cc_number'
-                  value={cc_number}
-                  onChange={handleSetcc_number}
-                  placeholder=''
-                  required={true}
-                />
-                <label htmlFor='cc-number'>Credit card number</label>
+  render() {
+    return (
+      <div className='row'>
+        <form onSubmit={this.submitOrder}>
+          <div className='card' style={{ width: "450px" }}>
+            <div className='card-body'>
+              <div className='d-block my-3'>
+                <h4>Pay securely</h4>
+                <div
+                  style={{
+                    width: "415px",
+                    margin: "0 auto",
+                    padding: "23px",
+                    borderRadius: "10px",
+                    backgroundColor: "#e1e1e1",
+                    border: " 1px solid #cbcbcb"
+                  }}>
+                  <CardElement style={{ base: { fontSize: "18px" } }} />
+                </div>
 
-                <div className='invalid-feedback'>
-                  Credit card number is required
+                <div className='mt-4'>
+                  <button className='btn btn-lg btn-primary btn-block'>
+                    <i className='fab fa-cc-stripe'></i> Pay Now
+                  </button>
+                </div>
+                <div className='payment-icons' style={{ textAlign: "center" }}>
+                  <h5 className='mt-3'>We Accept</h5>
+                  <img src={paymentmethods} style={{ width: "160px" }} />
                 </div>
               </div>
             </div>
-            {/* End Name row */}
-
-            <div className='row'>
-              <div className='col-md-3 mb-3'>
-                <label htmlFor='cc-expiration'>Expiration</label>
-                <input
-                  type='text'
-                  className='form-control'
-                  id='cc_expiration'
-                  name='cc_expiration'
-                  value={cc_expiration}
-                  onChange={handleSetcc_expiration}
-                  placeholder=''
-                  required={true}
-                />
-                <div className='invalid-feedback'>Expiration date required</div>
-              </div>
-              <div className='col-md-3 mb-3'>
-                <label htmlFor='cc_cvv'>CVV</label>
-                <input
-                  type='text'
-                  className='form-control'
-                  id='cc_cvv'
-                  name='cc_cvv'
-                  value={cc_cvv}
-                  onChange={handleSetcc_cvv}
-                  placeholder=''
-                  required={true}
-                />
-                <div className='invalid-feedback'>Security code required</div>
-              </div>
-            </div>
-            {/* End Card Details Row */}
           </div>
-        </div>
-
-        <div className='form-check my-4'>
-          <input
-            className='form-check-input'
-            type='checkbox'
-            name='acknowlegment'
-            value={acknowlegment}
-            onChange={handleSetacknowlegment}
-            required
-            id='acknowlegment'
-          />
-
-          <label className='form-check-label' htmlFor='acknowlegment'>
-            I have read and agree to the website terms and conditions *
-          </label>
-        </div>
-
-        <button className='btn btn-lg btn-primary btn-block'>Pay Now</button>
-      </form>
-    </div>
-  );
+        </form>
+      </div>
+    );
+  }
+}
+PaymentForm.propTypes = {
+  stripe: PropTypes.shape({
+    createToken: PropTypes.func.isRequired
+  }).isRequired
 };
-
-export default PaymentForm;
+export default injectStripe(PaymentForm);
